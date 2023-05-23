@@ -2,3 +2,10 @@
 ###################
 .terraform*
 .terraform.*
+.terraform/
+*.backup
+*.hcl
+*.tfvars
+*.tfstate
+*.out
+*.info
