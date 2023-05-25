@@ -10,10 +10,10 @@ output "azure_mysql_server" {
   value = azurerm_mysql_firewall_rule.wordpress.server_name
 }
 
-/* output "bastion_public_address" {
+output "bastion_public_address" {
   #value = azurerm_public_ip.wordpress.fqdn
   value = azurerm_linux_virtual_machine.vm_bastion.public_ip_address
-} */
+}
 
 /*
 output "private_ip_vmss_1" {

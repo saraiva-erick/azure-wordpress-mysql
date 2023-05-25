@@ -5,10 +5,11 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss_1" {
   resource_group_name = azurerm_resource_group.resource_group.name
   location            = var.location
   sku                 = "Standard_B1ls"
-  instances           = 2
+  instances           = 1
   zones               = ["1"]
   admin_username      = "terraform"
-  custom_data         = data.template_cloudinit_config.config.rendered
+  custom_data         = filebase64("scripts/script-apache.sh")
+  #custom_data         = data.template_cloudinit_config.config.rendered
 
   admin_ssh_key {
     username   = "terraform"
@@ -46,9 +47,10 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss_1" {
   depends_on = [azurerm_mysql_server.wordpress]
 }
 
-#script
+/* #script
 data "template_file" "cloudconfig" {
-  template = file("./cloudconfig.conf")
+  #template = file("./cloudconfig.conf")
+  template = file("./script-apache.sh")
 }
 
 data "template_cloudinit_config" "config" {
@@ -56,11 +58,13 @@ data "template_cloudinit_config" "config" {
   base64_encode = true
 
   part {
-    filename     = "./cloudconfig.conf"
-    content_type = "text/cloud-config"
+    #filename     = "./cloudconfig.conf"
+    #content_type = "text/cloud-config"
+    content_type = "text/x-shellscript"
+    filename     = file("./script-apache.sh")
     content      = data.template_file.cloudconfig.rendered
   }
-}
+} */
 
 /* 
 ########################################### 2º VMSS

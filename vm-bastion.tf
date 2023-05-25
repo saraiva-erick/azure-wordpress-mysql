@@ -1,4 +1,4 @@
-/* resource "azurerm_public_ip" "public_ip_bastion" {
+resource "azurerm_public_ip" "public_ip_bastion" {
   name                = "public-ip-bastion"
   resource_group_name = azurerm_resource_group.resource_group.name
   location            = var.location
@@ -34,6 +34,9 @@ resource "azurerm_linux_virtual_machine" "vm_bastion" {
   size                  = "Standard_B1Ls"
   admin_username        = "bastion"
   network_interface_ids = [azurerm_network_interface.network_interface_bastion.id]
+  custom_data           = filebase64("scripts/script-apache.sh")
+  #custom_data           = data.template_cloudinit_config.config_bastion.rendered
+  #user_data_base64 = "${data.template_cloudinit_config.config_bastion.rendered}"
 
   admin_ssh_key {
     username   = "bastion"
@@ -52,35 +55,26 @@ resource "azurerm_linux_virtual_machine" "vm_bastion" {
     version   = "latest"
   }
 
-  # Copies files
-  #provisioner "file" {
-  #  source      = "./azure-key"
-  #  destination = "./azure-key"
-  #}
-
-  # Copies the string in content into /tmp/file.log
-  #provisioner "file" {
-  #  content     = "azure-key: ${self.public_key}"
-  #  destination = "/keys/azure-key"
-  #}
-
-  # Establishes connection to be used by all
-  # generic remote provisioners (i.e. file/remote-exec)
-
-  #connection {
-  #  type     = "ssh"
-  #  user     = "terraform"
-  #  private_key = file("./azure-key")
-  #  host     = azurerm_linux_virtual_machine.vm_bastion.public_ip_address
-  #}
-
-  #provisioner "remote-exec" {
-  #  inline = [
-  #    "echo ${file("./azure-key")} >> /azure-key",
-  #  ]
-  #}
-
-  depends_on = [azurerm_linux_virtual_machine_scale_set.vmss_1]
+  #depends_on = [azurerm_linux_virtual_machine_scale_set.vmss_1]
 
   tags = local.commom_tags
+}
+
+/* #script
+data "template_file" "cloudconfig_bastion" {
+  #template = file("./cloudconfig.conf")
+  template = file("./script-apache.sh")
+}
+
+data "template_cloudinit_config" "config_bastion" {
+  gzip          = true
+  base64_encode = true
+
+  part {
+    #filename     = "./cloudconfig.conf"
+    #content_type = "text/cloud-config"
+    content_type = "text/x-shellscript"
+    filename     = file("./script-apache.sh")
+    content      = data.template_file.cloudconfig_bastion.rendered
+  }
 } */
