@@ -2,9 +2,9 @@ output "application_public_address_vmss1_zone1" {
   value = azurerm_public_ip.PublicIP_vmss_1.fqdn
 }
 
-/* output "application_public_address_vmss1_zone3" {
+output "application_public_address_vmss1_zone3" {
   value = azurerm_public_ip.PublicIP_vmss_2.fqdn
-} */
+}
 
 output "azure_mysql_server" {
   value = azurerm_mysql_firewall_rule.wordpress.server_name

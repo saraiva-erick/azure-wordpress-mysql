@@ -40,7 +40,7 @@ resource "azurerm_lb_rule" "lb_rule_vmss_1" {
   backend_address_pool_ids       = [azurerm_lb_backend_address_pool.backend_vmss_1.id]
 }
 
-/* 
+
 #Declaração dos recursos para a 2ª VM Scale Set (vmss)
 resource "azurerm_public_ip" "PublicIP_vmss_2" {
   name                = "PublicIPLB-vmss-2"
@@ -81,4 +81,4 @@ resource "azurerm_lb_rule" "lb_rule_vmss_2" {
   backend_port                   = 80
   frontend_ip_configuration_name = "PublicIPAddress-Z2"
   backend_address_pool_ids       = [azurerm_lb_backend_address_pool.backend_vmss_2.id]
-} */
+}
